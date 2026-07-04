@@ -6,6 +6,31 @@
 #include "GameFramework/Pawn.h"
 #include "RTSCameraPawn.generated.h"
 
+class USpringArmComponent;
+class UCameraComponent;
+class USceneComponent;
+
+USTRUCT(BlueprintType)
+struct FRTSCameraSettings
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, Category="Movement")
+	float MoveSpeed = 3000.f;
+	
+	UPROPERTY(EditAnywhere, Category="Zoom")
+	float ZoomSpeed = 1000.f;
+
+	UPROPERTY(EditAnywhere, Category="Zoom")
+	float MinZoom = 1200.f;
+
+	UPROPERTY(EditAnywhere, Category="Zoom")
+	float MaxZoom = 5000.f;
+
+	UPROPERTY(EditAnywhere, Category="Rotation")
+	float RotationSpeed = 90.f;
+};
+
 UCLASS()
 class PROJECTLEGATUS_API ARTSCameraPawn : public APawn
 {
@@ -15,9 +40,19 @@ public:
 	// Sets default values for this pawn's properties
 	ARTSCameraPawn();
 
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<USceneComponent> Root;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<USpringArmComponent> SpringArm;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
+	TObjectPtr<UCameraComponent> Camera;
 
 public:	
 	// Called every frame
@@ -26,4 +61,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	void MoveCamera(const FVector2D& Input, float DeltaTime);
+	
+	// variables
+	UPROPERTY(editAnywhere, Category="RTS Camera Settings")
+	FRTSCameraSettings Settings;
 };
