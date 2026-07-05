@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "RTSPlayerController.generated.h"
 #include "InputActionValue.h"
-#include "EnhancedInputComponent.h"
+#include "InputMappingContext.h"
+#include "RTSPlayerController.generated.h"
 
 /**
  * 
@@ -20,6 +20,13 @@ public:
 	ARTSPlayerController();
 	
 	virtual void SetupInputComponent() override;
+	
+	// properties
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputMappingContext> DefaultMappingContext;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_MoveCamera;
 	
 protected:
 	virtual void BeginPlay() override;

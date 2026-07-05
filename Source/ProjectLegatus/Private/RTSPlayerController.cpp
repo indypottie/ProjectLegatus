@@ -3,8 +3,12 @@
 
 #include "RTSPlayerController.h"
 
+#include "EnhancedInputComponent.h"
 #include "RTSCameraPawn.h"
 #include "Engine/World.h"
+
+#include "EnhancedInputSubsystems.h"
+#include "Engine/LocalPlayer.h"
 
 ARTSPlayerController::ARTSPlayerController()
 {
@@ -31,6 +35,13 @@ void ARTSPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("Player Controller Started"));
+	
+	ULocalPlayer* LocalPlayer = GetLocalPlayer();
+	
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer))
+	{
+		Subsystem->AddMappingContext(DefaultMappingContext, 0);
+	}
 }
 
 void ARTSPlayerController::MoveCamera(const FInputActionValue& Value)
