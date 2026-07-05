@@ -25,7 +25,7 @@ struct FRTSCameraSettings
 	float MinZoom = 1200.f;
 
 	UPROPERTY(EditAnywhere, Category="Zoom")
-	float MaxZoom = 5000.f;
+	float MaxZoom = 8000.f;
 
 	UPROPERTY(EditAnywhere, Category="Rotation")
 	float RotationSpeed = 90.f;
@@ -58,12 +58,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	void MoveCamera(const FVector2D& Input, float DeltaTime);
+	void MoveCamera(const FVector2D& Input);
+	void ZoomCamera(float Value);
+	void RotateCamera(float Value);
 	
 	// variables
 	UPROPERTY(editAnywhere, Category="RTS Camera Settings")
 	FRTSCameraSettings Settings;
+	
+private:
+	// private functions
+	void HandleMovement(float DeltaTime);
+	void HandleRotation(float DeltaTime);
+	void HandleZoom(float DeltaTime);
+	
+	// private variables
+	FVector MovementInput;
+	float RotationInput;
+	float TargetZoom;
 };

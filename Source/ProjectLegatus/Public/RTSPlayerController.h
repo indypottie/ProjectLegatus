@@ -28,6 +28,12 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> IA_MoveCamera;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_ZoomCamera;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_RotateCamera;
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -35,4 +41,10 @@ private:
 	
 	UFUNCTION()
 	void MoveCamera(const FInputActionValue& Value);
+	
+	UFUNCTION()
+	void ZoomCamera(const FInputActionValue& Value);
+	
+	UFUNCTION()
+	void RotateCamera(const FInputActionValue& Value);
 };
