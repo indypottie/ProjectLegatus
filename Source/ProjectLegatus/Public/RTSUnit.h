@@ -28,8 +28,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	virtual void Select();
-	virtual void Deselect();
+	virtual void SetSelected(bool Selected);
+	virtual bool IsUnitSelected() const;
 	
 	// Public Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -37,4 +37,9 @@ public:
 	
 	UPROPERTY(visibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
+	
+private:
+	
+	// private variables
+	bool bIsSelected = false;
 };

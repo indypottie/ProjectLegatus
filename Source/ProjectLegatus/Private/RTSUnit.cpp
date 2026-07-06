@@ -48,11 +48,15 @@ void ARTSUnit::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ARTSUnit::Select()
+void ARTSUnit::SetSelected(bool Selected)
 {
+	if (bIsSelected == Selected) return;
+	
+	bIsSelected = Selected;
+	MeshComponent->SetRenderCustomDepth(bIsSelected);
 }
 
-void ARTSUnit::Deselect()
+bool ARTSUnit::IsUnitSelected() const
 {
+	return bIsSelected;
 }
-

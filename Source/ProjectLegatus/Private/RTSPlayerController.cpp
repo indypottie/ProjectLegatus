@@ -8,6 +8,9 @@
 #include "Engine/World.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "RTSSelectionManager.h"
+#include "RTSUnit.h"
+#include "Core/RTSCollisionChannels.h"
 #include "Engine/LocalPlayer.h"
 
 ARTSPlayerController::ARTSPlayerController()
@@ -73,6 +76,14 @@ void ARTSPlayerController::SetupInputComponent()
 			this,
 			&ARTSPlayerController::RotateCamera
 		);
+		
+		// mouse 
+		EnhancedInput->BindAction(
+			IA_Select,
+			ETriggerEvent::Started,
+			this,
+			&ARTSPlayerController::HandleSelection
+		);
 	}
 }
 
@@ -116,5 +127,31 @@ void ARTSPlayerController::RotateCamera(const FInputActionValue& Value)
 	if (ARTSCameraPawn* Camera = Cast<ARTSCameraPawn>(GetPawn()))
 	{
 		Camera->RotateCamera(Input);
+	}
+}
+
+void ARTSPlayerController::HandleSelection()
+{
+	FHitResult HitResult;
+	
+	bool bHit = GetHitResultUnderCursorByChannel(
+		UEngineTypes::ConvertToTraceType(RTSCollisionChannels::UnitSelection),
+		false,
+		HitResult
+	);
+	
+	URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
+	if (!SelectionManager) return;
+	
+	if (bHit)
+	{
+		if (ARTSUnit* Unit = Cast<ARTSUnit>(HitResult.GetActor()))
+		{
+			SelectionManager->SelectUnit(Unit);
+		}
+	}
+	else
+	{
+		SelectionManager->ClearSelection();
 	}
 }

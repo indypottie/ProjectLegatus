@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> IA_RotateCamera;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_Select;
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -47,4 +50,7 @@ private:
 	
 	UFUNCTION()
 	void RotateCamera(const FInputActionValue& Value);
+	
+	UFUNCTION()
+	void HandleSelection();
 };
