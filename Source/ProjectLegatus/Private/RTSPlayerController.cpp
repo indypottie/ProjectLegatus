@@ -8,6 +8,7 @@
 #include "Engine/World.h"
 
 #include "EnhancedInputSubsystems.h"
+#include "RTSCommandManager.h"
 #include "RTSSelectionManager.h"
 #include "RTSUnit.h"
 #include "Core/RTSCollisionChannels.h"
@@ -84,6 +85,13 @@ void ARTSPlayerController::SetupInputComponent()
 			this,
 			&ARTSPlayerController::HandleSelection
 		);
+		
+		EnhancedInput->BindAction(
+			IA_Command,
+			ETriggerEvent::Started,
+			this,
+			&ARTSPlayerController::HandleCommand
+		);
 	}
 }
 
@@ -132,6 +140,9 @@ void ARTSPlayerController::RotateCamera(const FInputActionValue& Value)
 
 void ARTSPlayerController::HandleSelection()
 {
+	URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
+	if (!SelectionManager) return;
+	
 	FHitResult HitResult;
 	
 	bool bHit = GetHitResultUnderCursorByChannel(
@@ -139,9 +150,6 @@ void ARTSPlayerController::HandleSelection()
 		false,
 		HitResult
 	);
-	
-	URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
-	if (!SelectionManager) return;
 	
 	if (bHit)
 	{
@@ -154,4 +162,27 @@ void ARTSPlayerController::HandleSelection()
 	{
 		SelectionManager->ClearSelection();
 	}
+}
+
+void ARTSPlayerController::HandleCommand()
+{
+	URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
+
+	URTSCommandManager* CommandManager = GetWorld()->GetSubsystem<URTSCommandManager>();
+
+	if (!SelectionManager || !CommandManager) return;
+	
+	FHitResult HitResult;
+	
+	bool bHit = GetHitResultUnderCursorByChannel(
+		UEngineTypes::ConvertToTraceType(RTSCollisionChannels::GroundSelection),
+		false,
+		HitResult
+	);
+	if (!bHit) return;
+	
+	ARTSUnit* SelectedUnit = SelectionManager->GetSelectedUnit();
+	if (!SelectedUnit) return;
+	
+	CommandManager->IssueMoveCommand(SelectedUnit, HitResult.Location);
 }

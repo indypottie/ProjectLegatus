@@ -37,6 +37,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> IA_Select;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_Command;
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -53,4 +56,7 @@ private:
 	
 	UFUNCTION()
 	void HandleSelection();
+	
+	UFUNCTION()
+	void HandleCommand();
 };
