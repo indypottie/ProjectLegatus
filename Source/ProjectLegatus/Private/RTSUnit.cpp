@@ -53,7 +53,14 @@ void ARTSUnit::SetSelected(bool Selected)
 	if (bIsSelected == Selected) return;
 	
 	bIsSelected = Selected;
-	MeshComponent->SetRenderCustomDepth(bIsSelected);
+	if (bIsSelected)
+	{
+		MeshComponent->SetOverlayMaterial(SelectionOverlayMaterial);
+	}
+	else
+	{
+		MeshComponent->SetOverlayMaterial(nullptr);
+	}
 }
 
 bool ARTSUnit::IsUnitSelected() const

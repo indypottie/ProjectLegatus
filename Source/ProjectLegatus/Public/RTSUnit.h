@@ -38,6 +38,9 @@ public:
 	UPROPERTY(visibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 	
+	UPROPERTY(editdefaultsOnly)
+	TObjectPtr<UMaterialInterface> SelectionOverlayMaterial;
+	
 private:
 	
 	// private variables
