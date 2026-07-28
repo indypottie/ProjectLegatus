@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "RTSUnit.generated.h"
 
+class URTSMovementComponent;
 class UCapsuleComponent;
 
 UCLASS(abstract)
@@ -20,6 +21,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	virtual void PostInitializeComponents() override;
 
 public:	
 	// Called every frame
@@ -31,6 +34,12 @@ public:
 	virtual void SetSelected(bool Selected);
 	virtual bool IsUnitSelected() const;
 	
+	// Public overrides
+	virtual UPawnMovementComponent* GetMovementComponent() const override;
+	
+	// Public Functions
+	void MoveTo(const FVector& Destination);
+	
 	// Public Properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCapsuleComponent> CapsuleComponent;
@@ -40,6 +49,9 @@ public:
 	
 	UPROPERTY(editdefaultsOnly)
 	TObjectPtr<UMaterialInterface> SelectionOverlayMaterial;
+	
+	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category="Movement")\
+	TObjectPtr<URTSMovementComponent> RTSMovementComponent;
 	
 private:
 	

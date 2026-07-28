@@ -63,7 +63,7 @@ public:
 	void RotateCamera(float Value);
 	
 	// variables
-	UPROPERTY(editAnywhere, Category="RTS Camera Settings")
+	UPROPERTY(EditAnywhere, Category="RTS Camera Settings")
 	FRTSCameraSettings Settings;
 	
 private:

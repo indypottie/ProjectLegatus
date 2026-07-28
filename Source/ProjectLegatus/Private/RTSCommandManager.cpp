@@ -14,4 +14,6 @@ void URTSCommandManager::IssueMoveCommand(ARTSUnit* Unit, const FVector& Destina
 		*Unit->GetName(),
 		*Destination.ToString()
 	);
+	
+	Unit->MoveTo(Destination);
 }

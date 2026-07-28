@@ -3,9 +3,11 @@
 
 #include "RTSUnit.h"
 
+#include "RTSMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Core/RTSCollisionChannels.h"
+#include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values
 ARTSUnit::ARTSUnit()
@@ -17,6 +19,8 @@ ARTSUnit::ARTSUnit()
 	
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetupAttachment(CapsuleComponent);
+	
+	RTSMovementComponent = CreateDefaultSubobject<URTSMovementComponent>(TEXT("MovementComponent"));
 	
 	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CapsuleComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
@@ -32,6 +36,13 @@ void ARTSUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ARTSUnit::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	
+	RTSMovementComponent->SetUpdatedComponent(CapsuleComponent);
 }
 
 // Called every frame
@@ -66,4 +77,14 @@ void ARTSUnit::SetSelected(bool Selected)
 bool ARTSUnit::IsUnitSelected() const
 {
 	return bIsSelected;
+}
+
+UPawnMovementComponent* ARTSUnit::GetMovementComponent() const
+{
+	return RTSMovementComponent;
+}
+
+void ARTSUnit::MoveTo(const FVector& Destination)
+{
+	RTSMovementComponent->MoveTo(Destination);
 }
