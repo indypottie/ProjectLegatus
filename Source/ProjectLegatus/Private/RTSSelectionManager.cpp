@@ -5,30 +5,81 @@
 
 #include "RTSUnit.h"
 
-void URTSSelectionManager::SelectUnit(ARTSUnit* Unit)
+void URTSSelectionManager::Select(ARTSUnit* Unit, ERTSSelectionMode SelectionMode)
 {
-	if (SelectedUnit == Unit) return;
+	if (!Unit) return;
 	
-	ClearSelection();
-	SelectedUnit = Unit;
-	
-	if (SelectedUnit)
+	TArray<ARTSUnit*> Units;
+	Units.Add(Unit);
+	Select(Units, SelectionMode);
+}
+
+void URTSSelectionManager::Select(const TArray<ARTSUnit*>& Units, ERTSSelectionMode SelectionMode)
+{
+	if (Units.IsEmpty()) return;
+
+	if (SelectionMode == ERTSSelectionMode::Replace)
 	{
-		SelectedUnit->SetSelected(true);
+		ClearSelection();
 	}
+
+	if (SelectionMode == ERTSSelectionMode::Replace ||
+		SelectionMode == ERTSSelectionMode::Add)
+	{
+		for (ARTSUnit* Unit : Units)
+		{
+			AddToSelection(Unit);
+		}
+
+		return;
+	}
+
+	// Toggle
+	for (ARTSUnit* Unit : Units)
+	{
+		if (!Unit) continue;
+
+		if (SelectedUnits.Contains(Unit))
+		{
+			RemoveFromSelection(Unit);
+		}
+		else
+		{
+			AddToSelection(Unit);
+		}
+	}
+}
+
+void URTSSelectionManager::AddToSelection(ARTSUnit* Unit)
+{
+	if (!Unit) return;
+	if (SelectedUnits.Contains(Unit)) return;
+	
+	SelectedUnits.Add(Unit);
+	Unit->SetSelected(true);
+}
+
+void URTSSelectionManager::RemoveFromSelection(ARTSUnit* Unit)
+{
+	if (!Unit) return;
+	
+	if (SelectedUnits.Remove(Unit) > 0)
+	{
+		Unit->SetSelected(false);
+	}
+}
+
+const FSelectionList& URTSSelectionManager::GetSelectedUnits() const
+{
+	return SelectedUnits;
 }
 
 void URTSSelectionManager::ClearSelection()
 {
-	if (SelectedUnit)
+	for (ARTSUnit* Unit : SelectedUnits)
 	{
-		SelectedUnit->SetSelected(false);
+		Unit->SetSelected(false);
 	}
 	
-	SelectedUnit = nullptr;
-}
-
-ARTSUnit* URTSSelectionManager::GetSelectedUnit() const
-{
-	return SelectedUnit;
+	SelectedUnits.Empty();
 }

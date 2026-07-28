@@ -3,13 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Core/RTSSelectionTypes.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "RTSSelectionManager.generated.h"
 
 class ARTSUnit;
-/**
- * 
- */
+
+using FSelectionList = TArray<TObjectPtr<ARTSUnit>>;
+
 UCLASS()
 class PROJECTLEGATUS_API URTSSelectionManager : public UWorldSubsystem
 {
@@ -17,12 +18,16 @@ class PROJECTLEGATUS_API URTSSelectionManager : public UWorldSubsystem
 	
 public:
 	
-	void SelectUnit(ARTSUnit* Unit);
+	void Select(ARTSUnit* Unit, ERTSSelectionMode SelectionMode);
+	void Select(const TArray<ARTSUnit*>& Units, ERTSSelectionMode SelectionMode);
 	void ClearSelection();
-	ARTSUnit* GetSelectedUnit() const;
+	const FSelectionList& GetSelectedUnits() const;
 	
 private:
 	
+	void AddToSelection(ARTSUnit* Unit);
+	void RemoveFromSelection(ARTSUnit* Unit);
+	
 	UPROPERTY()
-	TObjectPtr<ARTSUnit> SelectedUnit = nullptr;
+	TArray<TObjectPtr<ARTSUnit>> SelectedUnits;
 };

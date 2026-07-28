@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RTSSelectionManager.h"
 #include "Subsystems/WorldSubsystem.h"
 #include "RTSCommandManager.generated.h"
 
@@ -17,6 +18,6 @@ class PROJECTLEGATUS_API URTSCommandManager : public UWorldSubsystem
 	
 public:
 	
-	void IssueMoveCommand(ARTSUnit* Unit, const FVector& Destination);
+	void IssueMoveCommand(const FSelectionList& Units, const FVector& Destination);
 	
 };

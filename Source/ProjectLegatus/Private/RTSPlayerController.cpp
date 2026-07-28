@@ -151,16 +151,30 @@ void ARTSPlayerController::HandleSelection()
 		HitResult
 	);
 	
+	ERTSSelectionMode SelectionMode = ERTSSelectionMode::Replace;
+	
 	if (bHit)
 	{
 		if (ARTSUnit* Unit = Cast<ARTSUnit>(HitResult.GetActor()))
 		{
-			SelectionManager->SelectUnit(Unit);
+			if (IsInputKeyDown(EKeys::LeftShift))
+			{
+				SelectionMode = ERTSSelectionMode::Add;
+			}
+			else if (IsInputKeyDown(EKeys::LeftControl))
+			{
+				SelectionMode = ERTSSelectionMode::Toggle;
+			}
+			
+			SelectionManager->Select(Unit, SelectionMode);
 		}
 	}
 	else
 	{
-		SelectionManager->ClearSelection();
+		if (SelectionMode == ERTSSelectionMode::Replace)
+		{
+			SelectionManager->ClearSelection();
+		}
 	}
 }
 
@@ -181,8 +195,5 @@ void ARTSPlayerController::HandleCommand()
 	);
 	if (!bHit) return;
 	
-	ARTSUnit* SelectedUnit = SelectionManager->GetSelectedUnit();
-	if (!SelectedUnit) return;
-	
-	CommandManager->IssueMoveCommand(SelectedUnit, HitResult.Location);
+	CommandManager->IssueMoveCommand(SelectionManager->GetSelectedUnits(), HitResult.Location);
 }

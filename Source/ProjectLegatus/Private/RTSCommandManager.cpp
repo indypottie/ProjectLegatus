@@ -5,15 +5,18 @@
 
 #include "RTSUnit.h"
 
-void URTSCommandManager::IssueMoveCommand(ARTSUnit* Unit, const FVector& Destination)
+void URTSCommandManager::IssueMoveCommand(const FSelectionList& Units, const FVector& Destination)
 {
-	if (!Unit) return;
+	for (ARTSUnit* Unit : Units)
+	{
+		if (!Unit) continue;
 	
-	UE_LOG(LogTemp, Warning,
-		TEXT("Move command issued to %s (%s)"),
-		*Unit->GetName(),
-		*Destination.ToString()
-	);
+		UE_LOG(LogTemp, Warning,
+			TEXT("Move command issued to %s (%s)"),
+			*Unit->GetName(),
+			*Destination.ToString()
+		);
 	
-	Unit->MoveTo(Destination);
+		Unit->MoveTo(Destination);
+	}
 }
