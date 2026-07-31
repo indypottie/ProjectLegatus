@@ -8,6 +8,7 @@
 #include "InputMappingContext.h"
 #include "RTSPlayerController.generated.h"
 
+class USelectionBoxWidget;
 /**
  * 
  */
@@ -20,6 +21,8 @@ public:
 	ARTSPlayerController();
 	
 	virtual void SetupInputComponent() override;
+	
+	void SetSelectionWidget(USelectionBoxWidget* Widget);
 	
 	// properties
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -40,6 +43,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> IA_Command;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	float DragThreshold = 10.f;
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -58,5 +64,20 @@ private:
 	void HandleSelection();
 	
 	UFUNCTION()
+	void HandleBoxSelection();
+	
+	UFUNCTION()
 	void HandleCommand();
+	
+	// selection box 
+	UPROPERTY()
+	TObjectPtr<USelectionBoxWidget> SelectionWidget;
+	bool bIsDragging = false;
+	
+	FVector2D SelectionStart;
+	FVector2D SelectionEnd;
+	
+	void BeginSelection();
+	void UpdateSelection();
+	void EndSelection();
 };

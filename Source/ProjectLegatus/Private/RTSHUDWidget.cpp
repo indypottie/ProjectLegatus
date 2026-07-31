@@ -3,3 +3,7 @@
 
 #include "RTSHUDWidget.h"
 
+USelectionBoxWidget* URTSHUDWidget::GetSelectionBoxWidget() const
+{
+	return SelectionBoxWidget;
+}

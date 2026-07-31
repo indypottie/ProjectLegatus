@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "RTSHUDWidget.generated.h"
 
+class USelectionBoxWidget;
 /**
  * 
  */
@@ -13,4 +14,11 @@ UCLASS()
 class PROJECTLEGATUS_API URTSHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
+	
+public:
+	USelectionBoxWidget* GetSelectionBoxWidget() const;
+	
+protected: 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<USelectionBoxWidget> SelectionBoxWidget;
 };

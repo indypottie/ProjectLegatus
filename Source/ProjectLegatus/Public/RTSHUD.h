@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "RTSHUD.generated.h"
 
+class USelectionBoxWidget;
 /**
  * 
  */
@@ -13,12 +14,13 @@ UCLASS()
 class PROJECTLEGATUS_API ARTSHUD : public AHUD
 {
 	GENERATED_BODY()
+	
+public:
+	USelectionBoxWidget* GetSelectionBoxWidget() const;
 
 protected:
 
 	virtual void BeginPlay() override;
-
-protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class URTSHUDWidget> RootWidgetClass;
