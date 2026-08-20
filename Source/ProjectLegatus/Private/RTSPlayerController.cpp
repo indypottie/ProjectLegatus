@@ -14,6 +14,7 @@
 #include "SelectionBoxWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Core/RTSCollisionChannels.h"
+#include "Core/RTSTypes/RTSFormationCommand.h"
 #include "Engine/LocalPlayer.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -81,14 +82,36 @@ void ARTSPlayerController::SetupInputComponent()
 			&ARTSPlayerController::RotateCamera
 		);
 		
-		// mouse
+		// right mouse
+		// EnhancedInput->BindAction(
+		// 	IA_Command,
+		// 	ETriggerEvent::Started,
+		// 	this,
+		// 	&ARTSPlayerController::HandleCommand
+		// );
+		
 		EnhancedInput->BindAction(
 			IA_Command,
 			ETriggerEvent::Started,
 			this,
-			&ARTSPlayerController::HandleCommand
+			&ARTSPlayerController::BeginCommand
+		);
+
+		EnhancedInput->BindAction(
+			IA_Command,
+			ETriggerEvent::Triggered,
+			this,
+			&ARTSPlayerController::UpdateCommand
+		);
+
+		EnhancedInput->BindAction(
+			IA_Command,
+			ETriggerEvent::Completed,
+			this,
+			&ARTSPlayerController::EndCommand
 		);
 		
+		// left mouse 
 		EnhancedInput->BindAction(
 			IA_Select,
 			ETriggerEvent::Started,
@@ -243,22 +266,22 @@ void ARTSPlayerController::HandleBoxSelection()
 
 void ARTSPlayerController::HandleCommand()
 {
-	URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
-
-	URTSCommandManager* CommandManager = GetWorld()->GetSubsystem<URTSCommandManager>();
-
-	if (!SelectionManager || !CommandManager) return;
-	
-	FHitResult HitResult;
-	
-	bool bHit = GetHitResultUnderCursorByChannel(
-		UEngineTypes::ConvertToTraceType(RTSCollisionChannels::GroundSelection),
-		false,
-		HitResult
-	);
-	if (!bHit) return;
-	
-	CommandManager->IssueMoveCommand(SelectionManager->GetSelectedUnits(), HitResult.Location);
+	// URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
+	//
+	// URTSCommandManager* CommandManager = GetWorld()->GetSubsystem<URTSCommandManager>();
+	//
+	// if (!SelectionManager || !CommandManager) return;
+	//
+	// FHitResult HitResult;
+	//
+	// bool bHit = GetHitResultUnderCursorByChannel(
+	// 	UEngineTypes::ConvertToTraceType(RTSCollisionChannels::GroundSelection),
+	// 	false,
+	// 	HitResult
+	// );
+	// if (!bHit) return;
+	//
+	// CommandManager->IssueMoveCommand(SelectionManager->GetSelectedUnits(), HitResult.Location);
 }
 
 void ARTSPlayerController::BeginSelection()
@@ -301,4 +324,52 @@ void ARTSPlayerController::EndSelection()
 		HandleSelection();
 	}
 	bIsDragging = false;
+}
+
+void ARTSPlayerController::BeginCommand()
+{
+	FHitResult HitResult;
+	const bool bHit = GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(RTSCollisionChannels::GroundSelection), false, HitResult);
+	
+	if (!bHit) return;
+	bIssuingCommand = true;
+	
+	CommandTarget = HitResult.Location;
+	CommandDirection = FVector::ForwardVector;
+}
+
+void ARTSPlayerController::UpdateCommand()
+{
+	if (!bIssuingCommand) return;
+	
+	FHitResult HitResult;
+	const bool bHit = GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(RTSCollisionChannels::GroundSelection), false, HitResult);
+	
+	if (!bHit) return;
+	
+	FVector Direction = HitResult.Location - CommandTarget;
+	Direction.Z = 0.f;
+	
+	if (!Direction.IsNearlyZero())
+	{
+		Direction.Normalize();
+		CommandDirection = Direction;
+	}
+}
+
+void ARTSPlayerController::EndCommand()
+{
+	if (!bIssuingCommand) return;
+	bIssuingCommand = false;
+	
+	URTSSelectionManager* SelectionManager = GetWorld()->GetSubsystem<URTSSelectionManager>();
+	URTSCommandManager* CommandManager = GetWorld()->GetSubsystem<URTSCommandManager>();
+	
+	if (!SelectionManager || !CommandManager) return;
+	
+	FRTSFormationCommand Command;
+	Command.TargetLocation = CommandTarget;
+	Command.ForwardDirection = CommandDirection;
+	
+	CommandManager->IssueMoveCommand(SelectionManager->GetSelectedUnits(), Command);
 }

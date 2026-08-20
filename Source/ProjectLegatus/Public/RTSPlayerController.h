@@ -80,4 +80,13 @@ private:
 	void BeginSelection();
 	void UpdateSelection();
 	void EndSelection();
+	
+	// command 
+	bool bIssuingCommand = false;
+	FVector CommandTarget = FVector::ZeroVector;
+	FVector CommandDirection = FVector::ForwardVector;
+	
+	void BeginCommand();
+	void UpdateCommand();
+	void EndCommand();
 };

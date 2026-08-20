@@ -7,6 +7,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "RTSCommandManager.generated.h"
 
+struct FRTSFormationCommand;
 class ARTSUnit;
 /**
  * 
@@ -18,6 +19,6 @@ class PROJECTLEGATUS_API URTSCommandManager : public UWorldSubsystem
 	
 public:
 	
-	void IssueMoveCommand(const FSelectionList& Units, const FVector& Destination);
+	void IssueMoveCommand(const FSelectionList& Units, const FRTSFormationCommand& Command);
 	
 };

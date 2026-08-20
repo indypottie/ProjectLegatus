@@ -3,20 +3,21 @@
 
 #include "RTSCommandManager.h"
 
+#include "RTSFormationManager.h"
 #include "RTSUnit.h"
+#include "Core/Formation/FormationData.h"
+#include "Engine/World.h"
 
-void URTSCommandManager::IssueMoveCommand(const FSelectionList& Units, const FVector& Destination)
+void URTSCommandManager::IssueMoveCommand(const FSelectionList& Units, const FRTSFormationCommand& Command)
 {
-	for (ARTSUnit* Unit : Units)
+	URTSFormationManager* FormationManager = GetWorld()->GetSubsystem<URTSFormationManager>();
+	if (!FormationManager) return;
+	
+	const TArray<FFormationSlot> Formation = FormationManager->BuildFormation(Units, Command);
+	
+	for (const FFormationSlot& Slot : Formation)
 	{
-		if (!Unit) continue;
-	
-		UE_LOG(LogTemp, Warning,
-			TEXT("Move command issued to %s (%s)"),
-			*Unit->GetName(),
-			*Destination.ToString()
-		);
-	
-		Unit->MoveTo(Destination);
+		if (!Slot.AssignedUnit) continue;
+		Slot.AssignedUnit->MoveTo(Slot.WorldLocation);
 	}
 }
