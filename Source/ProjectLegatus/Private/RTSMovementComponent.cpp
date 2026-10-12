@@ -25,6 +25,11 @@ void URTSMovementComponent::MoveTo(const FVector& Destination)
 	bMoving = true;
 }
 
+void URTSMovementComponent::SetMovementSettings(const FRTSMovementSettings& NewSettings)
+{
+	MovementSettings = NewSettings;
+}
+
 void URTSMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);

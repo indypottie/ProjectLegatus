@@ -6,6 +6,7 @@
 #include "GameFramework/Pawn.h"
 #include "RTSUnit.generated.h"
 
+class URTSUnitDefinition;
 class URTSMovementComponent;
 class UCapsuleComponent;
 
@@ -41,6 +42,9 @@ public:
 	void MoveTo(const FVector& Destination);
 	
 	// Public Properties
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Unit")
+	TObjectPtr<URTSUnitDefinition> UnitDefinition;
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UCapsuleComponent> CapsuleComponent;
 	

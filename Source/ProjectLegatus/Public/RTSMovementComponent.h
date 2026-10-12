@@ -2,21 +2,11 @@
 
 #pragma once
 
+#include "Core/Movement/RTSMovementSettings.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PawnMovementComponent.h"
 #include "RTSMovementComponent.generated.h"
 
-USTRUCT(BlueprintType)
-struct FRTSMovementSettings
-{
-	GENERATED_BODY()
-	
-	UPROPERTY(EditAnywhere, Category="Speed")
-	float MoveSpeed = 300.f;
-	
-	UPROPERTY(EditAnywhere, Category="DistanceThreshold")
-	float DistanceThreshold = 5.f;
-};
 
 UCLASS()
 class PROJECTLEGATUS_API URTSMovementComponent : public UPawnMovementComponent
@@ -29,6 +19,7 @@ public:
 	virtual float GetMaxSpeed() const override;
 	
 	void MoveTo(const FVector& Destination);
+	void SetMovementSettings(const FRTSMovementSettings& NewSettings);
 	
 protected:
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -40,7 +31,7 @@ private:
 	bool HasReachedDestination(const FVector& CurrentLocation, const FVector& DesiredLocation) const;
 	
 	// movement settings
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(Transient)
 	FRTSMovementSettings MovementSettings;
 	
 	// variables

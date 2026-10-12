@@ -3,6 +3,7 @@
 
 #include "RTSUnit.h"
 
+#include "Core/Units/RTSUnitDefinition.h"
 #include "RTSMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -43,6 +44,14 @@ void ARTSUnit::PostInitializeComponents()
 	Super::PostInitializeComponents();
 	
 	RTSMovementComponent->SetUpdatedComponent(CapsuleComponent);
+	
+	if (!UnitDefinition)
+	{
+		UE_LOG(LogTemp, Error, TEXT("%s has no unit definition assigned."), *GetName());
+		return;
+	}
+	
+	RTSMovementComponent->SetMovementSettings(UnitDefinition->MovementSettings);
 }
 
 // Called every frame
