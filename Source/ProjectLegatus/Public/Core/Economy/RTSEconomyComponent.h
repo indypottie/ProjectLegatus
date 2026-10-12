@@ -35,6 +35,8 @@ public:
 
 protected:
 
+	void BeginPlay() override;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Economy")
 	TArray<FRTSResourceAmount> StartingResources;
 

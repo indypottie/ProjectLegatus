@@ -3,3 +3,14 @@
 
 #include "RTSPlayerState.h"
 
+#include "Core/Economy/RTSEconomyComponent.h"
+
+ARTSPlayerState::ARTSPlayerState()
+{
+	EconomyComponent = CreateDefaultSubobject<URTSEconomyComponent>(TEXT("EconomyComponent"));
+}
+
+URTSEconomyComponent* ARTSPlayerState::GetEconomyComponent() const
+{
+	return EconomyComponent;
+}
