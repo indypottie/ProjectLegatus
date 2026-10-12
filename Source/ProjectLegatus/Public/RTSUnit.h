@@ -50,7 +50,7 @@ public:
 	UPROPERTY(editdefaultsOnly)
 	TObjectPtr<UMaterialInterface> SelectionOverlayMaterial;
 	
-	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category="Movement")\
+	UPROPERTY(visibleAnywhere, BlueprintReadOnly, Category="Movement")
 	TObjectPtr<URTSMovementComponent> RTSMovementComponent;
 	
 private:

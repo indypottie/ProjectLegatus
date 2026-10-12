@@ -16,12 +16,12 @@ void URTSSelectionManager::Select(ARTSUnit* Unit, ERTSSelectionMode SelectionMod
 
 void URTSSelectionManager::Select(const TArray<ARTSUnit*>& Units, ERTSSelectionMode SelectionMode)
 {
-	if (Units.IsEmpty()) return;
-
 	if (SelectionMode == ERTSSelectionMode::Replace)
 	{
 		ClearSelection();
 	}
+	
+	if (Units.IsEmpty()) return;
 
 	if (SelectionMode == ERTSSelectionMode::Replace ||
 		SelectionMode == ERTSSelectionMode::Add)

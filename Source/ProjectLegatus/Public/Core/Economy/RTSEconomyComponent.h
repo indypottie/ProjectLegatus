@@ -42,6 +42,9 @@ protected:
 
 private:
 
+	// helpers
+	bool BuildResourceTotals(const FRTSResourceCost& Cost, TMap<ERTSResourceType, int64>& OutTotals) const;
+	
 	UPROPERTY()
 	TMap<ERTSResourceType, int32> Resources;
 };
