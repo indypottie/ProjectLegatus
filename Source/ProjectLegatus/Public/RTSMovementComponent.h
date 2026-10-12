@@ -38,4 +38,10 @@ private:
 	FVector TargetLocation;
 	
 	bool bMoving = false;
+	
+	// path-following state 
+	UPROPERTY(Transient)
+	TArray<FVector> PathPoints;
+	
+	int32 CurrentPathPointIndex = INDEX_NONE;
 };

@@ -13,7 +13,7 @@ bool URTSNavigationSubsystem::FindPath(const FVector& StartLocation, const FVect
 	if (!NavigationSystem) return false;
 	
 	UNavigationPath* NavigationPath = UNavigationSystemV1::FindPathToLocationSynchronously(World, StartLocation, Destination);
-	if (!NavigationPath || !NavigationPath->IsValid()) return false;
+	if (!NavigationPath || !NavigationPath->IsValid() || NavigationPath->IsPartial()) return false;
 	
 	OutPath = NavigationPath->PathPoints;
 	return OutPath.Num() >= 2;
