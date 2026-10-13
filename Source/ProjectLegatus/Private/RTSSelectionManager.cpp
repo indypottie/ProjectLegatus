@@ -18,10 +18,14 @@ void URTSSelectionManager::Select(const TArray<ARTSUnit*>& Units, ERTSSelectionM
 {
 	if (SelectionMode == ERTSSelectionMode::Replace)
 	{
-		ClearSelection();
+		ClearSelectionInternal();
 	}
 	
-	if (Units.IsEmpty()) return;
+	if (Units.IsEmpty())
+	{
+		SelectionChangedEvent.Broadcast(SelectedUnits);
+		return;
+	}
 
 	if (SelectionMode == ERTSSelectionMode::Replace ||
 		SelectionMode == ERTSSelectionMode::Add)
@@ -30,7 +34,8 @@ void URTSSelectionManager::Select(const TArray<ARTSUnit*>& Units, ERTSSelectionM
 		{
 			AddToSelection(Unit);
 		}
-
+		
+		SelectionChangedEvent.Broadcast(SelectedUnits);
 		return;
 	}
 
@@ -48,6 +53,8 @@ void URTSSelectionManager::Select(const TArray<ARTSUnit*>& Units, ERTSSelectionM
 			AddToSelection(Unit);
 		}
 	}
+	
+	SelectionChangedEvent.Broadcast(SelectedUnits);
 }
 
 void URTSSelectionManager::AddToSelection(ARTSUnit* Unit)
@@ -69,6 +76,19 @@ void URTSSelectionManager::RemoveFromSelection(ARTSUnit* Unit)
 	}
 }
 
+void URTSSelectionManager::ClearSelectionInternal()
+{
+	for (ARTSUnit* Unit : SelectedUnits)
+	{
+		if (IsValid(Unit))
+		{
+			Unit->SetSelected(false);
+		}
+	}
+
+	SelectedUnits.Empty();
+}
+
 const FSelectionList& URTSSelectionManager::GetSelectedUnits() const
 {
 	return SelectedUnits;
@@ -76,10 +96,6 @@ const FSelectionList& URTSSelectionManager::GetSelectedUnits() const
 
 void URTSSelectionManager::ClearSelection()
 {
-	for (ARTSUnit* Unit : SelectedUnits)
-	{
-		Unit->SetSelected(false);
-	}
-	
-	SelectedUnits.Empty();
+	ClearSelectionInternal();
+	SelectionChangedEvent.Broadcast(SelectedUnits);
 }

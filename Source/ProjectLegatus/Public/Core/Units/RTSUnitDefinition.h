@@ -17,4 +17,7 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Movement")
 	FRTSMovementSettings MovementSettings;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Capabilities")
+	bool bCanBuild = false;
 };

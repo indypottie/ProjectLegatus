@@ -11,6 +11,8 @@ class ARTSUnit;
 
 using FSelectionList = TArray<TObjectPtr<ARTSUnit>>;
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnRTSSelectionChanged, const FSelectionList&);
+
 UCLASS()
 class PROJECTLEGATUS_API URTSSelectionManager : public UWorldSubsystem
 {
@@ -23,6 +25,8 @@ public:
 	void ClearSelection();
 	const FSelectionList& GetSelectedUnits() const;
 	
+	FOnRTSSelectionChanged& OnSelectionChanged(){return SelectionChangedEvent;}
+	
 private:
 	
 	void AddToSelection(ARTSUnit* Unit);
@@ -30,4 +34,7 @@ private:
 	
 	UPROPERTY()
 	TArray<TObjectPtr<ARTSUnit>> SelectedUnits;
+	
+	FOnRTSSelectionChanged SelectionChangedEvent;
+	void ClearSelectionInternal();
 };

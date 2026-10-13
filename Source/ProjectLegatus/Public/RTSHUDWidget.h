@@ -2,11 +2,18 @@
 
 #pragma once
 
+#include  "RTSSelectionManager.h"
+
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "RTSHUDWidget.generated.h"
 
+class URTSCommandPanelWidget;
 class USelectionBoxWidget;
+class ARTSUnit;
+
+
+
 /**
  * 
  */
@@ -19,6 +26,20 @@ public:
 	USelectionBoxWidget* GetSelectionBoxWidget() const;
 	
 protected: 
+	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<URTSCommandPanelWidget> CommandPanelWidget;
+	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<USelectionBoxWidget> SelectionBoxWidget;
+	
+private:
+	UPROPERTY()
+	TObjectPtr<URTSSelectionManager> BoundSelectionManager;
+	
+	FDelegateHandle SelectionChangeHandle;
+	
+	void HandleSelectionChanged(const FSelectionList& SelectedUnits);
 };
