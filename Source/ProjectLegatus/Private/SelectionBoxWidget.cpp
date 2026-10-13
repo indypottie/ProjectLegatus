@@ -9,14 +9,6 @@
 void USelectionBoxWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	SetVisible(true);
-
-	SetRectangle(
-		FVector2D(100.0f, 100.0f),
-		FVector2D(300.0f, 300.0f)
-	);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Selection widget constructed"));
 }
 
 void USelectionBoxWidget::SetVisible(bool bVisible)
