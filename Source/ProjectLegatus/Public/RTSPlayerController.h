@@ -46,6 +46,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	float DragThreshold = 10.f;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_ToggleDeveloperPanel;
+	
 protected:
 	virtual void BeginPlay() override;
 	
@@ -68,6 +71,9 @@ private:
 	
 	UFUNCTION()
 	void HandleCommand();
+	
+	UFUNCTION()
+	void ToggleDeveloperPanel();
 	
 	// selection box 
 	UPROPERTY()

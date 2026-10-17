@@ -4,10 +4,19 @@
 #include "RTSHUDWidget.h"
 
 #include "UI/HUD/RTSCommandPanelWidget.h"
+#include "UI/HUD/RTSDeveloperPanelWidget.h"
 
 USelectionBoxWidget* URTSHUDWidget::GetSelectionBoxWidget() const
 {
 	return SelectionBoxWidget;
+}
+
+void URTSHUDWidget::ToggleDeveloperPanel()
+{
+	if (!DeveloperPanelWidget) return;
+	
+	const ESlateVisibility CurrentVisibility = DeveloperPanelWidget->GetVisibility();
+	DeveloperPanelWidget->SetVisibility(CurrentVisibility == ESlateVisibility::Visible ? ESlateVisibility::Collapsed : ESlateVisibility::Visible);
 }
 
 void URTSHUDWidget::NativeConstruct()

@@ -13,6 +13,14 @@ USelectionBoxWidget* ARTSHUD::GetSelectionBoxWidget() const
 	return RootWidget->GetSelectionBoxWidget();
 }
 
+void ARTSHUD::ToggleDeveloperPanel()
+{
+	if (RootWidget)
+	{
+		RootWidget->ToggleDeveloperPanel();
+	}
+}
+
 void ARTSHUD::BeginPlay()
 {
 	Super::BeginPlay();

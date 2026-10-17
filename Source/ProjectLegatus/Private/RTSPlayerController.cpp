@@ -9,6 +9,7 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "RTSCommandManager.h"
+#include "RTSHUD.h"
 #include "RTSSelectionManager.h"
 #include "RTSUnit.h"
 #include "SelectionBoxWidget.h"
@@ -132,6 +133,12 @@ void ARTSPlayerController::SetupInputComponent()
 			this,
 			&ARTSPlayerController::EndSelection
 		);
+		
+		EnhancedInput->BindAction(
+			IA_ToggleDeveloperPanel,
+			ETriggerEvent::Started,
+			this,
+			&ARTSPlayerController::ToggleDeveloperPanel);
 	}
 }
 
@@ -282,6 +289,14 @@ void ARTSPlayerController::HandleCommand()
 	// if (!bHit) return;
 	//
 	// CommandManager->IssueMoveCommand(SelectionManager->GetSelectedUnits(), HitResult.Location);
+}
+
+void ARTSPlayerController::ToggleDeveloperPanel()
+{
+	if (ARTSHUD* RTSHUD = Cast<ARTSHUD>(GetHUD()))
+	{
+		RTSHUD->ToggleDeveloperPanel();
+	}
 }
 
 void ARTSPlayerController::BeginSelection()

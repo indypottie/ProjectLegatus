@@ -11,6 +11,7 @@
 class URTSCommandPanelWidget;
 class USelectionBoxWidget;
 class ARTSUnit;
+class URTSDeveloperPanelWidget;
 
 
 
@@ -25,6 +26,8 @@ class PROJECTLEGATUS_API URTSHUDWidget : public UUserWidget
 public:
 	USelectionBoxWidget* GetSelectionBoxWidget() const;
 	
+	void ToggleDeveloperPanel();
+	
 protected: 
 	virtual void NativeConstruct() override;
 	virtual void NativeDestruct() override;
@@ -34,6 +37,9 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<USelectionBoxWidget> SelectionBoxWidget;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<URTSDeveloperPanelWidget> DeveloperPanelWidget;
 	
 private:
 	UPROPERTY()

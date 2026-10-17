@@ -17,7 +17,7 @@ class PROJECTLEGATUS_API ARTSHUD : public AHUD
 	
 public:
 	USelectionBoxWidget* GetSelectionBoxWidget() const;
-
+	void ToggleDeveloperPanel();
 protected:
 
 	virtual void BeginPlay() override;
